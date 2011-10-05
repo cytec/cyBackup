@@ -61,7 +61,6 @@ echo "  example -d /User/Mobile/DCIM -l this backups the named folders to your l
 echo ""
 echo "    -b    backup to cytecs server"
 echo "    -r    restore from server"
-echo "    -c      resets config for my server (create new with -cs)"
 echo "    -f    remote save to ftp server"
 echo "    -t    remote restore from ftp server"
 echo "    -u     Update Script"
@@ -75,15 +74,19 @@ exit 0
 }
 
 
-while getopts d:rsvfu opt
+while getopts brftul:a:dps opt
 do
   case "$opt" in
-    d) DIR="$OPTARG";;
-    r) redeb=1;;
-    s) simple=1;;
-    v) verbose=1;;
-    f) justrun=1;;
-    u) runupdate=1;;
+    b) BACKUP_CY=1;;
+    r) RESTORE_CY=1;;
+    f) BACKUP_FTP=1;;
+    t) RESTORE_FTP=1;;
+    u) update;;
+    l) SYNC_TO_PC=1;;
+    a) adbackupdir "$OPTARG";;
+    d) ONLY_DIR="$OPTARG";;
+    p) DROPBOX=1;;
+    s) changesettings;;
     :) echo "Option \"$OPTARG\" needs an Argument.";;
     \?) helpme;;
   esac
@@ -92,10 +95,10 @@ done
 ## adds Dir follwed by -a to the custom backup list
 function adbackupdir() {
     #touch $CUSTOM_BACKUP_DIRS
-    if [ ! -d "$DIR" ]; then
-        echo "$DIR is not a valid directory"
+    if [ ! -d "$1" ]; then
+        echo "$1 is not a valid directory"
     else
-        echo "$DIR" >> $CUSTOM_BACKUP_DIRS
+        echo "$1" >> $CUSTOM_BACKUP_DIRS
     fi
 }
 
@@ -145,4 +148,8 @@ do
     rsync -R "$folder" "$tmpdir"
 done
 
+}
+
+function simplerestore() {
+    rsync -R "$restoredir/*" /
 }
