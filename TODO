@@ -1,0 +1,17 @@
+
+TODOS:
+
+- Dropbox upload support
+- rewrite to optargs
+- runtime args overwrite setting args
+- move settings to plist
+- support for "new" Cydia (1.x)
+- add depends to script (not only to deb)
+- improve convert function (old settings to new one)
+- improve first run function (settings helper)
+
+
+ADDITIONAL:
+
+- may include an autoupdate?
+- rsync backup to PC in same WIFI
